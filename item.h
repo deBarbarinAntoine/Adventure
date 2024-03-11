@@ -9,12 +9,14 @@
 #include <string>
 
 class item {
+
 protected:
-std::string m_name;
+    std::string m_name;
 
 public:
-item() = default;
-virtual ~item() = default;
+    item() = default;
+    virtual ~item() = default;
+    std::string getName() const { return m_name; }
 };
 
 

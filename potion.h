@@ -19,6 +19,14 @@ public:
     bool isSelfUse() const { return m_selfUse; }
     float manaModifier() const { return m_manaModifier; };
     float hpModifier() const { return m_hpModifier; };
+
+    struct isHealthPot {
+        const potion* pot1;
+        const potion* pot2 = new potion("health potion", 0, 15, true);
+        isHealthPot() : pot1(pot2) {}
+        bool operator()(potion* pot2) const { return pot1->getName() == pot2->getName(); }
+    };
+
 };
 
 

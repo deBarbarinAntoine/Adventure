@@ -29,4 +29,6 @@ add_executable(Adventure main.cpp
         skillbook.cpp
         skillbook.h
         skill.cpp
-        skill.h)
+        skill.h
+        menu.cpp
+        menu.h)

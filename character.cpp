@@ -102,7 +102,7 @@ float character::useSkill(skill *attack) {
     }
 }
 
-std::vector<skillbook *> character::getSkillbooks() {
+std::vector<skillbook *> character::getSkillbooks() const {
     std::vector<skillbook*> skillbooks;
 
     // Iterate through the inventory and check for type using dynamic_cast
@@ -116,7 +116,7 @@ std::vector<skillbook *> character::getSkillbooks() {
     return skillbooks;
 }
 
-std::vector<potion *> character::getPotions() {
+std::vector<potion *> character::getPotions() const {
     std::vector<potion*> potions;
 
     // Iterate through the inventory and check for type using dynamic_cast
@@ -130,7 +130,7 @@ std::vector<potion *> character::getPotions() {
     return potions;
 }
 
-std::vector<equipment *> character::getEquipment() {
+std::vector<equipment *> character::getEquipment() const {
     std::vector<equipment*> equipments;
 
     // Iterate through the inventory and check for type using dynamic_cast
@@ -153,4 +153,20 @@ character::~character() {
     delete &m_weapon;
     delete &m_inventory;
     delete &m_skills;
+}
+
+bool character::isHealthPotion() const {
+    std::vector<potion*> potions = this->getPotions();
+    return std::any_of(potions.begin(), potions.end(), potion::isHealthPot());
+}
+
+potion *character::getHealthPot() {
+    if (this->isHealthPotion()) {
+        for (potion* pot:this->getPotions()) {
+            if (pot->getName() == "health potion") {
+                return pot;
+            }
+        }
+    }
+    return nullptr;
 }

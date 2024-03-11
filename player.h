@@ -16,12 +16,14 @@ protected:
 
 public:
     player(std::string name, int type);
-    void turn();
+    void turn(enemy* adv);
     void menu();
+    static void creationMenu();
     int getLevel() const { return m_character->getLevel(); };
     float getEquipmentStats() const { return m_character->getEquipmentStats(); }
     bool isDead() const { return m_character->isDead(); }
     void gainXp(int xp) { m_character-> gainXp(xp); }
+    void takeDamage(float damage) { m_character->takeDamage(damage); }
 };
 
 

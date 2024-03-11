@@ -208,8 +208,17 @@ enemy::enemy(int level, float equipmentStats) {
     }
 }
 
-void enemy::turn() {
-
+void enemy::turn(player* Player) {
+    if ((m_character->getHp() < 20) && (m_character->isHealthPotion())) {
+        m_character->usePotion(m_character->getHealthPot());
+    } else {
+        std::array<skill*, 4> skills = m_character->getSkills();
+        for (skill* singleSkill:skills) {
+            if (m_character->getCurrentMana() >= singleSkill->getManaCost()) {
+                Player->takeDamage(m_character->useSkill(singleSkill));
+            }
+        }
+    }
 }
 
 enemy::~enemy() {

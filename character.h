@@ -50,15 +50,20 @@ public:
     void learn(skillbook* newSkill, int index);
     virtual float useSkill(skill* attack); // returns 0 if not enough mana!
     int getLevel() const { return m_level; }
-    std::vector<skillbook*> getSkillbooks();
-    std::vector<potion*> getPotions();
-    std::vector<equipment*> getEquipment();
+    std::vector<skillbook*> getSkillbooks() const;
+    std::vector<potion*> getPotions() const;
+    std::vector<equipment*> getEquipment() const;
     void pocketItem(item* it);
-    float getEquipmentStats() { return m_weapon->getAttack() + m_armor->getDefense(); }
+    float getEquipmentStats() const { return m_weapon->getAttack() + m_armor->getDefense(); }
     void gainXp(int xp) { m_xp += xp; }
-    std::vector<equipment*> getCurrentEquipment() { return std::vector<equipment*>{m_weapon, m_armor}; }
-    armor* getCurrentArmor() { return m_armor; }
-    weapon* getCurrentWeapon() { return m_weapon; }
+    std::vector<equipment*> getCurrentEquipment() const { return std::vector<equipment*>{m_weapon, m_armor}; }
+    armor* getCurrentArmor() const { return m_armor; }
+    weapon* getCurrentWeapon() const { return m_weapon; }
+    float getHp() const { return m_hp; }
+    bool isHealthPotion() const;
+    potion* getHealthPot();
+    std::array<skill*, 4> getSkills() const { return m_skills; }
+    float getCurrentMana() const { return m_mana; }
 };
 
 

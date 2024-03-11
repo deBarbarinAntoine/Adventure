@@ -8,6 +8,7 @@
 
 #include <string>
 #include "character.h"
+#include "player.h"
 
 class enemy {
 private:
@@ -18,7 +19,7 @@ private:
 public:
     enemy(int level, float equipmentStats);
     ~enemy();
-    void turn();
+    void turn(player* Player);
     void setCharacterStats();
     bool isDead() const { return m_character->isDead(); }
     int getXp() const { return m_xp; }
