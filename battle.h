@@ -16,6 +16,8 @@ private:
 
 public:
     explicit battle(player* Player);
+    ~battle() { delete &m_enemy; }
+
     void run();
 };
 

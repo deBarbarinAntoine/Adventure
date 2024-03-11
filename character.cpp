@@ -143,3 +143,14 @@ std::vector<equipment *> character::getEquipment() {
 
     return equipments;
 }
+
+void character::pocketItem(item *it) {
+    m_inventory.push_back(it);
+}
+
+character::~character() {
+    delete &m_armor;
+    delete &m_weapon;
+    delete &m_inventory;
+    delete &m_skills;
+}

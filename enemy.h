@@ -12,7 +12,6 @@
 class enemy {
 private:
     std::string m_name;
-    // std::vector<item> m_drop;
     int m_xp;
     character* m_character;
 
@@ -21,6 +20,9 @@ public:
     ~enemy();
     void turn();
     void setCharacterStats();
+    bool isDead() const { return m_character->isDead(); }
+    int getXp() const { return m_xp; }
+    std::vector<item*> getDrop();
 };
 
 

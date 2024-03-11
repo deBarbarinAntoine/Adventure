@@ -34,15 +34,16 @@ int randomNb(int min, int max)  {
 // generates a random enemy with comparable power level and equipments.
 enemy::enemy(int level, float equipmentStats) {
 
-    weapon* Weapon;
-    armor* Armor;
+    // setting up temporary variables for the enemy's generation
     float weaponAttack, armorDefense;
     bool weaponIsMagic;
     int playerLevel = level;
     std::vector<item*> inventory;
 
+    // random throw between 0 and 100.000
     int random = randomNb(0, 100000);
 
+    // randomize the enemy's level and equipment statistics
     if (random > 33333) {
         // 20% equipments increase
         equipmentStats *= 1.2;
@@ -75,13 +76,24 @@ enemy::enemy(int level, float equipmentStats) {
         m_xp = 10 - (playerLevel - level);
     }
 
+    // setting the equipment statistics with one decimal only
     armorDefense = ((float)((int)((equipmentStats / 5) * 10))) / 10;
     weaponAttack = ((float)((int)((equipmentStats - armorDefense) * 10))) /10;
 
-    inventory.push_back(new potion("basic health potion", 0, 10, true));
+    // putting a health potion in the inventory
+    inventory.push_back(new potion("health potion", 0, 15, true));
 
+    // putting a mana potion in the inventory
+    inventory.push_back(new potion("mana potion", 15, 0, true));
+
+    // putting a poison in the inventory
+    inventory.push_back(new potion("poison", 0, 15, false));
+
+    // setting the enemy's character's class (50/50 chance) and its skillbooks according to its level.
     if (random < 50000) {
-        // create mage
+
+        // create mage character
+
         if (level < 5) {
             m_name = "goblin shaman";
             inventory.push_back(new skillbook(5, 10));
@@ -126,10 +138,20 @@ enemy::enemy(int level, float equipmentStats) {
             inventory.push_back(new skillbook(40, 80));
             inventory.push_back(new skillbook(0 ,80));
         }
+
+        // setting the mage's weapon to a magic one for consistency
         weaponIsMagic = true;
+
+        // creating the enemy's character with all generated information
         m_character = new mage(level, new armor(armorDefense), new weapon(weaponAttack, weaponIsMagic), inventory);
+
+        // delete temporary inventory
+        delete &inventory;
+
     } else {
-        // create warrior
+
+        // create warrior character
+
         if (level < 5) {
             m_name = "goblin warrior";
             inventory.push_back(new skillbook(5, 10));
@@ -174,8 +196,15 @@ enemy::enemy(int level, float equipmentStats) {
             inventory.push_back(new skillbook(0 ,80));
             inventory.push_back(new skillbook(0 ,90));
         }
+
+        // setting the warrior's weapon to a melee one for consistency
         weaponIsMagic = false;
+
+        // creating the enemy's character with all generated information
         m_character = new warrior(level, new armor(armorDefense), new weapon(weaponAttack, weaponIsMagic), inventory);
+
+        // delete temporary inventory
+        delete &inventory;
     }
 }
 
@@ -188,15 +217,98 @@ enemy::~enemy() {
 }
 
 void enemy::setCharacterStats() {
+    // set the corresponding level (according to the experience points amount)
     m_character->levelUp();
+
+    // learn all skills corresponding to the skillbooks present in the inventory
+    // and put it afresh in the inventory for drops.
     int index = 0;
-    for (skillbook* newSkill:m_character->getSkillbooks()) {
+    for (skillbook* newSkill : m_character->getSkillbooks()) {
         if (index < 5) {
             m_character->learn(newSkill, index);
-            m_character->deleteItem(newSkill);
+            m_character->pocketItem(newSkill);
             index++;
         } else {
             break;
         }
     }
+}
+
+// setting the drops randomly
+std::vector<item *> enemy::getDrop() {
+    std::vector<item*> drops;
+    int random = randomNb(0, 100000);
+
+    if (random > 80000) { // get 3 drops
+
+        // equipment:
+        if (random > 90000) {
+            drops.push_back(m_character->getCurrentWeapon());
+        } else {
+            drops.push_back(m_character->getCurrentArmor());
+        }
+
+        // skillbook:
+        int index = random % (int)(m_character->getSkillbooks().size());
+        drops.push_back(m_character->getSkillbooks()[index]);
+
+        // potion:
+        int rand2 = randomNb(0, 100000);
+        index = rand2 % (int)(m_character->getPotions().size());
+        drops.push_back(m_character->getPotions()[index]);
+
+    } else if (random > 60000) { // get 2 drops
+
+        if (random > 75000) { // equipment or skillbook
+
+            // weapon:
+            drops.push_back(m_character->getCurrentWeapon());
+        } else if (random > 70000) {
+
+            // armor:
+            drops.push_back(m_character->getCurrentArmor());
+        } else {
+
+            // skillbook:
+            int index = random % (int)(m_character->getSkillbooks().size());
+            drops.push_back(m_character->getSkillbooks()[index]);
+        }
+
+        // potion:
+        int rand2 = randomNb(0, 100000);
+        int index = rand2 % (int)(m_character->getPotions().size());
+        drops.push_back(m_character->getPotions()[index]);
+
+    } else if (random > 40000) { // get 1 drop
+
+        // equipment:
+        if (random > 53333) {
+            if (random > 56666) {
+                // weapon:
+                drops.push_back(m_character->getCurrentWeapon());
+            } else {
+                // armor:
+                drops.push_back(m_character->getCurrentArmor());
+            }
+
+            // skillbook:
+        } else if (random > 46667) {
+            int index = random % (int)(m_character->getSkillbooks().size());
+            drops.push_back(m_character->getSkillbooks()[index]);
+        } else {
+
+            // potion:
+            int rand2 = randomNb(0, 100000);
+            int index = rand2 % (int)(m_character->getPotions().size());
+            drops.push_back(m_character->getPotions()[index]);
+        }
+
+    } else if (random > 20000){
+
+        // get health potion
+        drops.push_back(new potion("health potion", 0, 15, true));
+
+    } // else: get nothing... bad luck!
+
+    return drops;
 }

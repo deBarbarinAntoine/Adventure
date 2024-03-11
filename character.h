@@ -17,6 +17,7 @@
 #include "skillbook.h"
 
 class character {
+
 protected:
     int m_xp;
     int m_level;
@@ -33,6 +34,7 @@ protected:
 
 public:
     character() = default;
+    ~character();
     void takeDamage(float damage);
     bool isDead() const;
     virtual void levelUp() = 0;
@@ -47,10 +49,16 @@ public:
     void equip(armor* newArmor);
     void learn(skillbook* newSkill, int index);
     virtual float useSkill(skill* attack); // returns 0 if not enough mana!
-    int getLevel() const { return m_level; };
+    int getLevel() const { return m_level; }
     std::vector<skillbook*> getSkillbooks();
     std::vector<potion*> getPotions();
     std::vector<equipment*> getEquipment();
+    void pocketItem(item* it);
+    float getEquipmentStats() { return m_weapon->getAttack() + m_armor->getDefense(); }
+    void gainXp(int xp) { m_xp += xp; }
+    std::vector<equipment*> getCurrentEquipment() { return std::vector<equipment*>{m_weapon, m_armor}; }
+    armor* getCurrentArmor() { return m_armor; }
+    weapon* getCurrentWeapon() { return m_weapon; }
 };
 
 
