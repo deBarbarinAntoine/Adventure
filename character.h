@@ -48,7 +48,9 @@ public:
     void learn(skillbook* newSkill, int index);
     virtual float useSkill(skill* attack); // returns 0 if not enough mana!
     int getLevel() const { return m_level; };
-    float getEquipmentStats() const { return m_armor->getDefense() + m_weapon->getAttack(); };
+    std::vector<skillbook*> getSkillbooks();
+    std::vector<potion*> getPotions();
+    std::vector<equipment*> getEquipment();
 };
 
 

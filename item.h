@@ -14,7 +14,7 @@ std::string m_name;
 
 public:
 item() = default;
-~item() = default;
+virtual ~item() = default;
 };
 
 

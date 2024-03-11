@@ -14,7 +14,7 @@ protected:
     bool m_isMagic;
 
 public:
-    weapon(std::string name, float attack, bool isMagic);
+    weapon(float attack, bool isMagic);
     std::string getName() const { return m_name; };
     float getAttack() const { return m_attack; };
     bool isMagic() const { return m_isMagic; };

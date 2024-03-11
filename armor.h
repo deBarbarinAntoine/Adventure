@@ -13,7 +13,7 @@ protected:
     float m_defense;
 
 public:
-    armor(std::string name, float defense);
+    armor(float defense);
     std::string getName() const { return m_name; };
     float getDefense() const { return m_defense; };
 };

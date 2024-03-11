@@ -4,6 +4,8 @@
 
 #include "mage.h"
 
+#include <utility>
+
 mage::mage() {
     m_hp = 80;
     m_maxHp = 80;
@@ -13,6 +15,11 @@ mage::mage() {
     m_defense = 10;
     m_level = 1;
     m_xp = 0;
+    m_inventory.push_back(new skillbook(5, 10));
+    m_inventory.push_back(new skillbook(0, 10));
+    m_inventory.push_back(new potion("basic health potion", 0, 10, true));
+    m_inventory.push_back(new weapon(5, true));
+    m_inventory.push_back(new armor(1));
 }
 
 void mage::levelUp() {
@@ -41,4 +48,11 @@ float mage::useSkill(skill *attack) {
         }
     }
     return damage;
+}
+
+mage::mage(int level, armor *Armor, weapon *Weapon, std::vector<item*> inventory) {
+    m_xp = 100 * level;
+    m_armor = Armor;
+    m_weapon = Weapon;
+    m_inventory = std::move(inventory);
 }

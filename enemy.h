@@ -20,7 +20,7 @@ public:
     enemy(int level, float equipmentStats);
     ~enemy();
     void turn();
-
+    void setCharacterStats();
 };
 
 

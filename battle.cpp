@@ -12,4 +12,5 @@ void battle::run() {
 battle::battle(player* Player) {
     m_player = Player;
     m_enemy = new enemy(Player->getLevel(), Player->getEquipmentStats());
+    m_enemy->setCharacterStats();
 }

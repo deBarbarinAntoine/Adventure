@@ -4,6 +4,9 @@
 
 #include "character.h"
 
+#include <utility>
+#include <typeinfo>
+
 void character::takeDamage(float damage) {
     float defense = m_defense + m_armor->getDefense();
     damage -= damage * (defense / 100);
@@ -16,8 +19,8 @@ bool character::isDead() const {
 
 void character::usePotion(potion* pot) {
     if (pot->isSelfUse()) {
-        character::hpRegen(pot->hpModifier());
-        character::manaRegen(pot->manaModifier());
+        this->hpRegen(pot->hpModifier());
+        this->manaRegen(pot->manaModifier());
     }
 }
 
@@ -49,7 +52,7 @@ void character::manaRegen(float regen) {
 
 void character::usePotion(potion *pot, character *adv) {
     if (pot->isSelfUse()) {
-        character::usePotion(pot);
+        this->usePotion(pot);
     } else {
         adv->takePotionDamage(pot);
     }
@@ -57,8 +60,8 @@ void character::usePotion(potion *pot, character *adv) {
 
 void character::takePotionDamage(potion *pot) {
     if (!pot->isSelfUse()) {
-        character::takeDamage(pot->hpModifier());
-        character::manaUse(pot->manaModifier());
+        this->takeDamage(pot->hpModifier());
+        this->manaUse(pot->manaModifier());
     }
 }
 
@@ -74,7 +77,7 @@ void character::equip(weapon *newWeapon) {
         m_inventory.push_back(m_weapon);
     }
     m_weapon = newWeapon;
-    character::deleteItem(newWeapon);
+    this->deleteItem(newWeapon);
 }
 
 void character::equip(armor *newArmor) {
@@ -82,19 +85,61 @@ void character::equip(armor *newArmor) {
         m_inventory.push_back(m_armor);
     }
     m_armor = newArmor;
-    character::deleteItem(newArmor);
+    this->deleteItem(newArmor);
 }
 
 void character::learn(skillbook *newSkill, int index) {
     m_skills[index] = new skill(newSkill);
-    character::deleteItem(newSkill);
+    this->deleteItem(newSkill);
 }
 
 float character::useSkill(skill *attack) {
     if (m_mana >= attack->getManaCost()) {
-        character::manaUse(attack->getManaCost());
+        this->manaUse(attack->getManaCost());
         return attack->getAttack();
     } else {
         return 0;
     }
+}
+
+std::vector<skillbook *> character::getSkillbooks() {
+    std::vector<skillbook*> skillbooks;
+
+    // Iterate through the inventory and check for type using dynamic_cast
+    for (item* it : m_inventory) {
+        skillbook* book = dynamic_cast<skillbook*>(it);
+        if (book) {
+            skillbooks.push_back(book);
+        }
+    }
+
+    return skillbooks;
+}
+
+std::vector<potion *> character::getPotions() {
+    std::vector<potion*> potions;
+
+    // Iterate through the inventory and check for type using dynamic_cast
+    for (item* it : m_inventory) {
+        potion* pot = dynamic_cast<potion*>(it);
+        if (pot) {
+            potions.push_back(pot);
+        }
+    }
+
+    return potions;
+}
+
+std::vector<equipment *> character::getEquipment() {
+    std::vector<equipment*> equipments;
+
+    // Iterate through the inventory and check for type using dynamic_cast
+    for (item* it : m_inventory) {
+        equipment* eq = dynamic_cast<equipment*>(it);
+        if (eq) {
+            equipments.push_back(eq);
+        }
+    }
+
+    return equipments;
 }

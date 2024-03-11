@@ -4,8 +4,56 @@
 
 #include "weapon.h"
 
-weapon::weapon(std::string name, float attack, bool isMagic) {
+weapon::weapon(float attack, bool isMagic) {
+    if (attack < 10) {
+        if (isMagic) {
+            m_name = "wooden wand";
+        } else {
+            m_name = "wooden club";
+        }
+    } else if (attack < 15) {
+        if (isMagic) {
+            m_name = "iron wand";
+        } else {
+            m_name = "iron dagger";
+        }
+    } else if (attack < 20) {
+        if (isMagic) {
+            m_name = "steel staff";
+        } else {
+            m_name = "steel spear";
+        }
+    } else if (attack < 25) {
+        if (isMagic) {
+            m_name = "ornate steel staff";
+        } else {
+            m_name = "ornate steel sword";
+        }
+    } else if (attack < 30) {
+        if (isMagic) {
+            m_name = "titanium staff";
+        } else {
+            m_name = "titanium halberd";
+        }
+    } else if (attack < 35) {
+        if (isMagic) {
+            m_name = "refined titanium staff";
+        } else {
+            m_name = "refined titanium rapier";
+        }
+    } else if (attack < 40) {
+        if (isMagic) {
+            m_name = "orichalcum orb";
+        } else {
+            m_name = "orichalcum sword";
+        }
+    } else {
+        if (isMagic) {
+            m_name = "mithril orb";
+        } else {
+            m_name = "mithril greatsword";
+        }
+    }
     m_attack = attack;
-    m_name = std::move(name);
     m_isMagic = isMagic;
 }

@@ -14,7 +14,7 @@ protected:
     float m_attack;
 
 public:
-    skillbook(std::string name, float manaCost, float attack);
+    skillbook(float manaCost, float attack);
     std::string getName() const { return m_name; };
     float getManaCost() const { return m_manaCost; };
     float getAttack() const { return m_attack; };
