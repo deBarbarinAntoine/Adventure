@@ -9,8 +9,6 @@
 
 
 #include "equipment.h"
-#include <iomanip>
-#include <iostream>
 
 class weapon: public equipment{
 protected:

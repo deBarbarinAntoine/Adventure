@@ -31,5 +31,6 @@ public:
 
 };
 
+std::ostream& operator<<(std::ostream& flux, potion* a);
 
 #endif //ADVENTURE_POTION_H

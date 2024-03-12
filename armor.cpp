@@ -31,7 +31,7 @@ std::ostream& operator<<(std::ostream& flux, armor* a) {
     if (a == nullptr) {
         flux << "Empty\n";
     } else {
-        flux << a->getName() << "\t" << a->getDefense() <<  "\n";
+        flux << a->getName() << "\t\t" << a->getDefense() <<  "\n";
     }
     return flux;
 }

@@ -3,6 +3,8 @@
 //
 
 #include "weapon.h"
+#include <iomanip>
+#include <iostream>
 
 weapon::weapon(float attack, bool isMagic) {
     if (attack < 10) {
@@ -64,7 +66,12 @@ std::ostream& operator<<(std::ostream& flux, weapon* a) {
     if (a == nullptr) {
         flux << "Empty\n";
     } else {
-        flux << a->getName() << "\t" << a->getAttack() << "\n";
+        std::string magic;
+
+        if (a->isMagic()) {
+            magic = "\tmagic";
+        }
+        flux << a->getName() << "\t" << a->getAttack() << "\t\t" << magic << "\n";
     }
     return flux;
 }

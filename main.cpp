@@ -5,6 +5,10 @@
 #include <vector>
 
 int main() {
+    int res = system("cls");
+    if (res != 0) {
+        system("clear");
+    }
     int choice;
     do {
         choice = menu::getMenuChoice("------------ Adventure ------------", std::vector<std::string>{"New Game", "Quit"});

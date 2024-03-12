@@ -22,5 +22,7 @@ public:
     float getAttack() const { return m_attack; };
 };
 
+std::ostream& operator<<(std::ostream& flux, skillbook* a);
+
 
 #endif //ADVENTURE_SKILLBOOK_H

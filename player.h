@@ -25,10 +25,11 @@ public:
     float getEquipmentStats() const { return m_character->getEquipmentStats(); }
     bool isDead() const { return m_character->isDead(); }
     void gainXp(int xp) { m_character-> gainXp(xp); }
-    void takeDamage(float damage) { m_character->takeDamage(damage); }
     void startBattle();
     character* getCharacter() { return m_character; }
     std::string getName() const { return m_name; }
+    void inventoryMenu();
+    void itemMenu(item* it);
 };
 
 

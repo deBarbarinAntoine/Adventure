@@ -3,6 +3,8 @@
 //
 
 #include "skillbook.h"
+#include <iomanip>
+#include <iostream>
 
 skillbook::skillbook(float manaCost, float attack) {
     if (manaCost > 0) {
@@ -48,4 +50,10 @@ skillbook::skillbook(float manaCost, float attack) {
     }
     m_manaCost = manaCost;
     m_attack = attack;
+}
+
+std::ostream& operator<<(std::ostream& flux, skillbook* a) {
+    flux << std::fixed << std::setprecision(1);
+    flux << a->getName() << "\t" << a->getManaCost() << "\t" << a->getAttack() << "\n";
+    return flux;
 }

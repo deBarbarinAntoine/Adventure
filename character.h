@@ -51,7 +51,7 @@ public:
     int getLevel() const { return m_level; }
     std::vector<skillbook*> getSkillbooks() const;
     std::vector<potion*> getPotions() const;
-    std::vector<equipment*> getEquipment() const;
+    std::vector<equipment*> getStoredEquipment() const;
     void pocketItem(item* it);
     float getEquipmentStats() const { return m_weapon->getAttack() + m_armor->getDefense(); }
     void gainXp(int xp) { m_xp += xp; }
@@ -66,6 +66,14 @@ public:
     float getMaxHp() const { return m_maxHp; }
     float getMaxMana() const { return m_maxMana; }
     virtual std::string getClassName() const = 0;
+    void printSkills();
+    void printEquipment();
+    std::vector<item *> printInventory();
+    std::vector<skillbook*> getSortedSkillbooks();
+    std::vector<potion*> getSortedPotions();
+    std::vector<equipment*> getSortedEquipment();
+    void useItem(item *it);
+    void learnSkillMenu(skillbook* skb);
 };
 
 std::ostream& operator<<(std::ostream& flux, character* a);
