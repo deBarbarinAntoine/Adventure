@@ -1,8 +1,8 @@
-#include <iostream>
+
+#include "player.h"
+#include "menu.h"
 #include <limits>
 #include <vector>
-#include "menu.h"
-#include "player.h"
 
 int main() {
     int choice;

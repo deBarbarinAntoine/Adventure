@@ -24,3 +24,14 @@ armor::armor(float defense) {
     }
     m_defense = defense;
 }
+
+std::ostream& operator<<(std::ostream& flux, armor* a) {
+    flux << std::fixed << std::setprecision(1);
+    flux << "Armor\t";
+    if (a == nullptr) {
+        flux << "Empty\n";
+    } else {
+        flux << a->getName() << "\t" << a->getDefense() <<  "\n";
+    }
+    return flux;
+}

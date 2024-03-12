@@ -2,11 +2,15 @@
 // Created by athor on 11/03/2024.
 //
 
+#pragma once
+
 #ifndef ADVENTURE_WEAPON_H
 #define ADVENTURE_WEAPON_H
 
 
 #include "equipment.h"
+#include <iomanip>
+#include <iostream>
 
 class weapon: public equipment{
 protected:
@@ -20,5 +24,6 @@ public:
     bool isMagic() const { return m_isMagic; };
 };
 
+std::ostream& operator<<(std::ostream& flux, weapon* a);
 
 #endif //ADVENTURE_WEAPON_H

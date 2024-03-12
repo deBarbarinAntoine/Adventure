@@ -13,11 +13,12 @@ int menu::getMenuChoice(std::string title, std::vector<std::string> options) {
     int choice;
 
     do {
-        std::cout << title << "\n";
+        std::cout << "\n";
+        std::cout << title << "\n\n";
         for (int i = 0; i < maxChoice; ++i) {
-            std::cout << i << options[i] << "\n";
+            std::cout << i+1 << ". " << options[i] << "\n";
         }
-        std::cout << "Enter your choice ("<< minChoice << "-" << maxChoice << "): ";
+        std::cout << "\nEnter your choice ("<< minChoice << "-" << maxChoice << "): ";
 
         // input validation
         if (!(std::cin >> choice)) {
@@ -26,7 +27,7 @@ int menu::getMenuChoice(std::string title, std::vector<std::string> options) {
             // clear input buffer
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
-    } while (choice >= minChoice && choice <= maxChoice);
+    } while (choice < minChoice || choice > maxChoice);
 
     return choice;
 }

@@ -3,9 +3,9 @@
 //
 
 #include "character.h"
-
-#include <utility>
-#include <typeinfo>
+#include <algorithm>
+#include <iomanip>
+#include <iostream>
 
 void character::takeDamage(float damage) {
     float defense = m_defense + m_armor->getDefense();
@@ -169,4 +169,28 @@ potion *character::getHealthPot() {
         }
     }
     return nullptr;
+}
+
+std::ostream& operator<<(std::ostream& flux, character* a) {
+    flux << std::fixed << std::setprecision(1);
+    flux << a->getHp() << "/" << a->getMaxHp() << " HP" << std::endl;
+    flux << a->getCurrentMana() << "/" << a->getMaxMana() << " Mana\n\n";
+    flux << " - Equipment:\n";
+    flux << "Type\tName\tAttack/Defense\n";
+    flux << a->getCurrentWeapon();
+    flux << a->getCurrentArmor();
+    std::array<skill*, 4> skills = a->getSkills();
+    int index = 1;
+    flux << "\n";
+    flux << " - Skills:\n";
+    flux << "Slot\tName\tMana\tAttack\n";
+    for (skill* singleSkill : skills) {
+        if (singleSkill != nullptr) {
+            flux << index << ".\t" << singleSkill;
+        } else {
+            flux << index << ".\tEmpty\n";
+        }
+        index++;
+    }
+    return flux;
 }

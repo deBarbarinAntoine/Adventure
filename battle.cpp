@@ -2,17 +2,18 @@
 // Created by athor on 11/03/2024.
 //
 
-#include <iostream>
 #include "battle.h"
+#include <iostream>
 
 // battle loop
 void battle::run() {
     do {
-    m_player->turn();
+    m_player->turn(m_enemy);
     if (m_enemy->isDead()) {
         break;
     }
-    m_enemy->turn();
+    m_enemy->turn(m_player->getCharacter());
+
  } while (!m_enemy->isDead() && !m_player->isDead());
     if (m_enemy->isDead()) {
         m_enemy->getDrop();

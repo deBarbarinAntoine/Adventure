@@ -3,8 +3,8 @@
 //
 
 #include "warrior.h"
-
 #include <utility>
+
 
 warrior::warrior() {
     m_hp = 100;
@@ -29,7 +29,7 @@ void warrior::levelUp() {
         m_xp -= 100;
         m_inventory.push_back(new skillbook(0, 10));
         m_inventory.push_back(new skillbook(5, 10));
-        m_inventory.push_back(new potion("basic health potion", 0, 10, true));
+        m_inventory.push_back(new potion("health potion", 0, 15, true));
         m_inventory.push_back(new weapon(5, false));
         m_inventory.push_back(new armor(1));
     }

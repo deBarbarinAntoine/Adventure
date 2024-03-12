@@ -57,3 +57,14 @@ weapon::weapon(float attack, bool isMagic) {
     m_attack = attack;
     m_isMagic = isMagic;
 }
+
+std::ostream& operator<<(std::ostream& flux, weapon* a) {
+    flux << std::fixed << std::setprecision(1);
+    flux << "Weapon\t";
+    if (a == nullptr) {
+        flux << "Empty\n";
+    } else {
+        flux << a->getName() << "\t" << a->getAttack() << "\n";
+    }
+    return flux;
+}

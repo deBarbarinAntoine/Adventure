@@ -2,6 +2,8 @@
 // Created by athor on 11/03/2024.
 //
 
+#pragma once
+
 #ifndef ADVENTURE_ITEM_H
 #define ADVENTURE_ITEM_H
 

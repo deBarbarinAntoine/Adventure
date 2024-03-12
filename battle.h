@@ -2,12 +2,13 @@
 // Created by athor on 11/03/2024.
 //
 
+#pragma once
+
 #ifndef ADVENTURE_BATTLE_H
 #define ADVENTURE_BATTLE_H
 
 
 #include "player.h"
-#include "enemy.h"
 
 class battle {
 private:

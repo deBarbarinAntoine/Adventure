@@ -2,12 +2,14 @@
 // Created by athor on 11/03/2024.
 //
 
+#pragma once
+
 #ifndef ADVENTURE_SKILL_H
 #define ADVENTURE_SKILL_H
 
 
-#include <string>
 #include "skillbook.h"
+#include <string>
 
 class skill {
 protected:
@@ -22,6 +24,8 @@ public:
     float getManaCost() const { return m_manaCost; };
     float getAttack() const { return m_attack; };
 };
+
+std::ostream& operator<<(std::ostream& flux, skill* a);
 
 
 #endif //ADVENTURE_SKILL_H

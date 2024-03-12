@@ -17,7 +17,7 @@ mage::mage() {
     m_xp = 0;
     m_inventory.push_back(new skillbook(5, 10));
     m_inventory.push_back(new skillbook(0, 10));
-    m_inventory.push_back(new potion("basic health potion", 0, 10, true));
+    m_inventory.push_back(new potion("health potion", 0, 15, true));
     m_inventory.push_back(new weapon(5, true));
     m_inventory.push_back(new armor(1));
 }

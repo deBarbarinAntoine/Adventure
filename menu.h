@@ -2,6 +2,8 @@
 // Created by thorgan on 11/03/24.
 //
 
+#pragma once
+
 #ifndef ADVENTURE_MENU_H
 #define ADVENTURE_MENU_H
 

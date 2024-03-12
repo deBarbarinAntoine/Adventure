@@ -2,13 +2,14 @@
 // Created by athor on 11/03/2024.
 //
 
+#pragma once
+
 #ifndef ADVENTURE_ENEMY_H
 #define ADVENTURE_ENEMY_H
 
 
-#include <string>
 #include "character.h"
-#include "player.h"
+#include <string>
 
 class enemy {
 private:
@@ -19,7 +20,7 @@ private:
 public:
     enemy(int level, float equipmentStats);
     ~enemy();
-    void turn(player* Player);
+    void turn(character* charPlayer);
     void setCharacterStats();
     bool isDead() const { return m_character->isDead(); }
     int getXp() const { return m_xp; }

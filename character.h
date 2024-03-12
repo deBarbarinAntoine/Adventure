@@ -2,19 +2,18 @@
 // Created by athor on 11/03/2024.
 //
 
+#pragma once
+
 #ifndef ADVENTURE_CHARACTER_H
 #define ADVENTURE_CHARACTER_H
 
 
-#include <vector>
-#include <array>
-#include "item.h"
 #include "weapon.h"
 #include "armor.h"
 #include "potion.h"
-#include "enemy.h"
 #include "skill.h"
-#include "skillbook.h"
+#include <vector>
+#include <array>
 
 class character {
 
@@ -64,7 +63,12 @@ public:
     potion* getHealthPot();
     std::array<skill*, 4> getSkills() const { return m_skills; }
     float getCurrentMana() const { return m_mana; }
+    float getMaxHp() const { return m_maxHp; }
+    float getMaxMana() const { return m_maxMana; }
+    virtual std::string getClassName() const = 0;
 };
+
+std::ostream& operator<<(std::ostream& flux, character* a);
 
 
 #endif //ADVENTURE_CHARACTER_H
