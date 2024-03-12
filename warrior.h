@@ -11,8 +11,6 @@
 #include "character.h"
 
 class warrior: public character {
-protected:
-
 public:
     warrior();
     warrior(int level, armor* Armor, weapon* Weapon, std::vector<item*> inventory);

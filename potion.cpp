@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <iostream>
 
+// a potion constructor/generator
 potion::potion(std::string name, float manaModifier, float hpModifier, bool selfUse) {
     m_name = std::move(name);
     m_manaModifier = manaModifier;
@@ -13,6 +14,7 @@ potion::potion(std::string name, float manaModifier, float hpModifier, bool self
     m_selfUse = selfUse;
 }
 
+// to display the potion's information
 std::ostream& operator<<(std::ostream& flux, potion* a) {
     flux << std::fixed << std::setprecision(1);
     std::string type;

@@ -13,12 +13,15 @@
 
 class player {
 protected:
+    // your name (yours, not the anime)
     std::string m_name;
+
+    // your character
     character* m_character;
 
 public:
     player(std::string name, int type);
-    void turn(enemy* adv);
+    bool turn(enemy* adv);
     void menu();
     static void creationMenu();
     int getLevel() const { return m_character->getLevel(); };
@@ -30,9 +33,10 @@ public:
     std::string getName() const { return m_name; }
     void inventoryMenu();
     void itemMenu(item* it);
+    void pocketItem(item* it) { m_character->pocketItem(it); }
 };
 
-
+// for displaying purposes
 std::ostream& operator<<(std::ostream& flux, player* a);
 
 

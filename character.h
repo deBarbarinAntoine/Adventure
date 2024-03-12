@@ -18,17 +18,41 @@
 class character {
 
 protected:
+
+    // experience points (to level-up)
     int m_xp;
+
+    // level
     int m_level;
+
+    // attack power
     float m_attack;
+
+    // defense (percentage of damage ignored)
     float m_defense;
+
+    // health points
     float m_hp;
+
+    // max health points
     float m_maxHp;
+
+    // mana ...that's magic!
     float m_mana;
+
+    // max mana points
     float m_maxMana;
+
+    // armor (equipped): some more defense here
     armor* m_armor = nullptr;
+
+    // weapon (equipped): some more attack here
     weapon* m_weapon = nullptr;
+
+    // inventory
     std::vector<item*> m_inventory;
+
+    // skills (only 4, I know it's not much... it remembers me of Pokémon, though)
     std::array<skill*, 4> m_skills = {nullptr, nullptr, nullptr, nullptr};
 
 public:
@@ -39,7 +63,7 @@ public:
     virtual void levelUp() = 0;
     void hpRegen(float regen);
     void manaRegen(float regen);
-    void manaUse(float damage);
+    void manaUse(float amount);
     void deleteItem(item* it);
     void usePotion(potion* pot);
     void usePotion(potion* pot, character* adv);

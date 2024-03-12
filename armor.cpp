@@ -4,6 +4,7 @@
 
 #include "armor.h"
 
+// creates an armor according to the `defense` parameter
 armor::armor(float defense) {
     if (defense < 2) {
         m_name = "leather shirt";
@@ -25,6 +26,7 @@ armor::armor(float defense) {
     m_defense = defense;
 }
 
+// to handle the armor's display easily
 std::ostream& operator<<(std::ostream& flux, armor* a) {
     flux << std::fixed << std::setprecision(1);
     flux << "Armor\t";

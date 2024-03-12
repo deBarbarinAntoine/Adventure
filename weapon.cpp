@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <iostream>
 
+// a weapon constructor/generator (some kind of blacksmith, right?)
 weapon::weapon(float attack, bool isMagic) {
     if (attack < 10) {
         if (isMagic) {
@@ -60,6 +61,7 @@ weapon::weapon(float attack, bool isMagic) {
     m_isMagic = isMagic;
 }
 
+// displaying the weapon's information
 std::ostream& operator<<(std::ostream& flux, weapon* a) {
     flux << std::fixed << std::setprecision(1);
     flux << "Weapon\t";

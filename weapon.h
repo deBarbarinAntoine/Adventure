@@ -12,7 +12,10 @@
 
 class weapon: public equipment{
 protected:
+    // the weapon attack power
     float m_attack;
+
+    // is that weapon magic?
     bool m_isMagic;
 
 public:
@@ -22,6 +25,7 @@ public:
     bool isMagic() const { return m_isMagic; };
 };
 
+// for displaying purposes
 std::ostream& operator<<(std::ostream& flux, weapon* a);
 
 #endif //ADVENTURE_WEAPON_H

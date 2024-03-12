@@ -12,7 +12,10 @@
 
 class skillbook: public item {
 protected:
+    // how much mana it costs to use (is it magic?)
     float m_manaCost;
+
+    // its attack power
     float m_attack;
 
 public:
@@ -22,6 +25,7 @@ public:
     float getAttack() const { return m_attack; };
 };
 
+// for displaying purposes
 std::ostream& operator<<(std::ostream& flux, skillbook* a);
 
 

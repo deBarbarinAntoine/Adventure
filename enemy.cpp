@@ -2,11 +2,13 @@
 // Created by athor on 11/03/2024.
 //
 
-#include <random>
-#include <chrono>
 #include "enemy.h"
 #include "mage.h"
 #include "warrior.h"
+#include <random>
+#include <chrono>
+#include <iostream>
+#include <thread>
 
 // randomNb generates a random integer between `min` and `max`.
 int randomNb(int min, int max)  {
@@ -28,7 +30,7 @@ int randomNb(int min, int max)  {
     std::mt19937 gen(seed);
     std::uniform_int_distribution<unsigned> distrib(min, max);
 
-    return distrib(gen);
+    return (int)(distrib(gen));
 }
 
 // generates a random enemy with comparable power level and equipments.
@@ -146,7 +148,7 @@ enemy::enemy(int level, float equipmentStats) {
         m_character = new mage(level, new armor(armorDefense), new weapon(weaponAttack, weaponIsMagic), inventory);
 
         // delete temporary inventory
-        delete &inventory;
+//        delete &inventory;
 
     } else {
 
@@ -204,7 +206,7 @@ enemy::enemy(int level, float equipmentStats) {
         m_character = new warrior(level, new armor(armorDefense), new weapon(weaponAttack, weaponIsMagic), inventory);
 
         // delete temporary inventory
-        delete &inventory;
+//        delete &inventory;
     }
 }
 
@@ -215,14 +217,18 @@ void enemy::turn(character* charPlayer) {
         std::array<skill*, 4> skills = m_character->getSkills();
         for (skill* singleSkill:skills) {
             if (m_character->getCurrentMana() >= singleSkill->getManaCost()) {
-                charPlayer->takeDamage(m_character->useSkill(singleSkill));
+                float damage = m_character->useSkill(singleSkill);
+                charPlayer->takeDamage(damage);
+                std::cout << std::fixed << std::setprecision(1);
+                std::cout << this->getName() << " inflicted you " << damage << " damage.\n";
+                std::this_thread::sleep_for(std::chrono::milliseconds(1500));
             }
         }
     }
 }
 
 enemy::~enemy() {
-    delete &m_character;
+//    delete &m_character;
 }
 
 void enemy::setCharacterStats() {
@@ -320,4 +326,11 @@ std::vector<item *> enemy::getDrop() {
     } // else: get nothing... bad luck!
 
     return drops;
+}
+
+// to handle the enemy's display easily
+std::ostream& operator<<(std::ostream& flux, enemy* a) {
+    flux << a->getName() << ": " << a->getCharacter()->getClassName() << std::endl;
+    flux << a->getCharacter() << std::endl;
+    return flux;
 }

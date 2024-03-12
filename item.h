@@ -10,14 +10,18 @@
 
 #include <string>
 
+// just to say that equipments, skillbooks and potions are items
 class item {
 
 protected:
+    // name of the thing
     std::string m_name;
 
 public:
     item() = default;
     virtual ~item() = default;
+
+    // to get the thing's name from anywhere
     std::string getName() const { return m_name; }
 };
 

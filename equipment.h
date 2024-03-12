@@ -10,9 +10,8 @@
 
 #include "item.h"
 
+// just to say that weapons and armors are equipments, that are items...
 class equipment: public item {
-protected:
-
 public:
     equipment() = default;
 };

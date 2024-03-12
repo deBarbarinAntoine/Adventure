@@ -5,7 +5,7 @@
 #include "warrior.h"
 #include <utility>
 
-
+// the birth of a warrior!...
 warrior::warrior() {
     m_hp = 100;
     m_maxHp = 100;
@@ -22,6 +22,7 @@ warrior::warrior() {
     m_inventory.push_back(new armor(1));
 }
 
+// let's level-up! Yaaayyy!
 void warrior::levelUp() {
     while (m_xp >= 100) {
         m_maxHp += 10;
@@ -40,12 +41,15 @@ void warrior::levelUp() {
     }
 }
 
+// let's use that skill: physical damage is the best!
 float warrior::useSkill(skill *attack) {
     float damage = character::useSkill(attack);
     if (attack->getManaCost() == 0) {
-        damage *= .1;
+        damage *= 1.1;
         if (!m_weapon->isMagic()){
             damage += m_weapon->getAttack();
+        } else {
+            damage += m_weapon->getAttack() / 10;
         }
     } else {
         if (m_weapon->isMagic()){
@@ -55,6 +59,7 @@ float warrior::useSkill(skill *attack) {
     return damage;
 }
 
+// a warrior constructor (for enemies only, right?)
 warrior::warrior(int level, armor *Armor, weapon *Weapon, std::vector<item*> inventory) {
     m_xp = 100 * level;
     m_armor = Armor;

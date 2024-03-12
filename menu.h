@@ -13,6 +13,7 @@
 
 class menu {
 public:
+    // just to build menus
     static int getMenuChoice(std::string title, std::vector<std::string> options);
 };
 

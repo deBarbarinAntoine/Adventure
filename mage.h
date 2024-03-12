@@ -11,8 +11,6 @@
 #include "character.h"
 
 class mage: public character{
-protected:
-
 public:
     mage();
     mage(int level, armor* Armor, weapon* Weapon, std::vector<item*> inventory);

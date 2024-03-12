@@ -13,8 +13,13 @@
 
 class skill {
 protected:
+    // the skill's name
     std::string m_name;
+
+    // its attack power
     float m_attack;
+
+    // its mana cost (is it magic?)
     float m_manaCost;
 
 public:
@@ -25,6 +30,7 @@ public:
     float getAttack() const { return m_attack; };
 };
 
+// for displaying purposes
 std::ostream& operator<<(std::ostream& flux, skill* a);
 
 

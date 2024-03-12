@@ -6,7 +6,10 @@
 #include <iomanip>
 #include <iostream>
 
+// skillbook constructor/generator
 skillbook::skillbook(float manaCost, float attack) {
+
+    // magic skills
     if (manaCost > 0) {
         if (attack < 20) {
             m_name = "magic bullet";
@@ -27,6 +30,8 @@ skillbook::skillbook(float manaCost, float attack) {
         } else {
             m_name = "pluri-elemental storm";
         }
+
+    // melee skills
     } else {
         if (attack < 20) {
             m_name = "basic strike";
@@ -52,6 +57,7 @@ skillbook::skillbook(float manaCost, float attack) {
     m_attack = attack;
 }
 
+// displaying the skillbook's information
 std::ostream& operator<<(std::ostream& flux, skillbook* a) {
     flux << std::fixed << std::setprecision(1);
     flux << a->getName() << "\t" << a->getManaCost() << "\t" << a->getAttack() << "\n";

@@ -17,9 +17,7 @@ add_executable(Adventure main.cpp
         mage.h
         warrior.cpp
         warrior.h
-        item.cpp
         item.h
-        equipment.cpp
         equipment.h
         weapon.cpp
         weapon.h

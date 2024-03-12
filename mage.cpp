@@ -6,6 +6,7 @@
 
 #include <utility>
 
+// a mage's birth...
 mage::mage() {
     m_hp = 80;
     m_maxHp = 80;
@@ -22,6 +23,7 @@ mage::mage() {
     m_inventory.push_back(new armor(1));
 }
 
+// let's level-up! Yaayy!
 void mage::levelUp() {
     while (m_xp >= 100) {
         m_maxHp += 5;
@@ -35,21 +37,25 @@ void mage::levelUp() {
     }
 }
 
+// it's magic? Excellent!
 float mage::useSkill(skill *attack) {
     float damage = character::useSkill(attack);
     if (attack->getManaCost() > 0) {
-        damage *= .2;
+        damage *= 1.2;
         if (m_weapon->isMagic()){
             damage += m_weapon->getAttack();
         }
     } else {
         if (!m_weapon->isMagic()) {
             damage += m_weapon->getAttack();
+        } else {
+            damage += m_weapon->getAttack() / 10;
         }
     }
     return damage;
 }
 
+// creating a mage (for enemies, right?)
 mage::mage(int level, armor *Armor, weapon *Weapon, std::vector<item*> inventory) {
     m_xp = 100 * level;
     m_armor = Armor;

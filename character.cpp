@@ -8,16 +8,19 @@
 #include <iostream>
 #include <limits>
 
+// Ouch! It hurts...
 void character::takeDamage(float damage) {
     float defense = m_defense + m_armor->getDefense();
     damage -= damage * (defense / 100);
     m_hp -= damage;
 }
 
+// Hey! You there?
 bool character::isDead() const {
     return m_hp > 0;
 }
 
+// let's take a potion
 void character::usePotion(potion* pot) {
     if (pot->isSelfUse()) {
         this->hpRegen(pot->hpModifier());
@@ -25,10 +28,13 @@ void character::usePotion(potion* pot) {
     }
 }
 
+// Watch it! This item will disappear...
 void character::deleteItem(item *it) {
     int index = 0;
     for (item*& owned: m_inventory) {
         if (owned == it) {
+
+            // index retrieved successfully!
             break;
         }
         index++;
@@ -36,6 +42,7 @@ void character::deleteItem(item *it) {
     m_inventory.erase(m_inventory.begin() + index);
 }
 
+// retrieving some health: it's so good!
 void character::hpRegen(float regen) {
     m_hp += regen;
     if (m_hp > m_maxHp) {
@@ -43,6 +50,7 @@ void character::hpRegen(float regen) {
     }
 }
 
+// retrieving some mana: I'm beat and exhausted!
 void character::manaRegen(float regen) {
     m_mana += regen;
     if (m_mana > m_maxMana) {
@@ -50,6 +58,7 @@ void character::manaRegen(float regen) {
     }
 }
 
+// let's use any potion/poison during the battle!
 void character::usePotion(potion *pot, character *adv) {
     if (pot->isSelfUse()) {
         this->usePotion(pot);
@@ -58,6 +67,7 @@ void character::usePotion(potion *pot, character *adv) {
     }
 }
 
+// ahahah, take that poison, you dumb monster!
 void character::takePotionDamage(potion *pot) {
     if (!pot->isSelfUse()) {
         this->takeDamage(pot->hpModifier());
@@ -65,13 +75,15 @@ void character::takePotionDamage(potion *pot) {
     }
 }
 
-void character::manaUse(float damage) {
-    m_mana -= damage;
+// hey! My mana is disappearing!
+void character::manaUse(float amount) {
+    m_mana -= amount;
     if (m_mana < 0) {
         m_mana = 0;
     }
 }
 
+// let's try that new weapon, okay?
 void character::equip(weapon *newWeapon) {
     if (m_weapon != nullptr) {
         m_inventory.push_back(m_weapon);
@@ -80,6 +92,7 @@ void character::equip(weapon *newWeapon) {
     this->deleteItem(newWeapon);
 }
 
+// ohoh! That new armor seems outstanding!
 void character::equip(armor *newArmor) {
     if (m_armor != nullptr) {
         m_inventory.push_back(m_armor);
@@ -88,11 +101,13 @@ void character::equip(armor *newArmor) {
     this->deleteItem(newArmor);
 }
 
+// let's learn some arcane art!
 void character::learn(skillbook *newSkill, int index) {
     m_skills[index] = new skill(newSkill);
     this->deleteItem(newSkill);
 }
 
+// let's attack with that!
 float character::useSkill(skill *attack) {
     if (m_mana >= attack->getManaCost()) {
         this->manaUse(attack->getManaCost());
@@ -102,6 +117,7 @@ float character::useSkill(skill *attack) {
     }
 }
 
+// skillbooks getter
 std::vector<skillbook *> character::getSkillbooks() const {
     std::vector<skillbook*> skillbooks;
 
@@ -116,6 +132,7 @@ std::vector<skillbook *> character::getSkillbooks() const {
     return skillbooks;
 }
 
+// potions getter
 std::vector<potion *> character::getPotions() const {
     std::vector<potion*> potions;
 
@@ -130,6 +147,7 @@ std::vector<potion *> character::getPotions() const {
     return potions;
 }
 
+//equipment getter
 std::vector<equipment *> character::getStoredEquipment() const {
     std::vector<equipment*> equipments;
 
@@ -144,10 +162,12 @@ std::vector<equipment *> character::getStoredEquipment() const {
     return equipments;
 }
 
+// nobody watches... let's take that!
 void character::pocketItem(item *it) {
     m_inventory.push_back(it);
 }
 
+// hey! Where is he?... Who was it?... Was there someone else here?...
 character::~character() {
     delete &m_armor;
     delete &m_weapon;
@@ -155,11 +175,13 @@ character::~character() {
     delete &m_skills;
 }
 
+// is it a poison or can I take it to heal myself?
 bool character::isHealthPotion() const {
     std::vector<potion*> potions = this->getPotions();
     return std::any_of(potions.begin(), potions.end(), potion::isHealthPot());
 }
 
+// where is my health potion?... Ah, here it is!
 potion *character::getHealthPot() {
     if (this->isHealthPotion()) {
         for (potion* pot:this->getPotions()) {
@@ -168,9 +190,12 @@ potion *character::getHealthPot() {
             }
         }
     }
+
+    // ooops, there's nothing here
     return nullptr;
 }
 
+// watch how talented I am!
 void character::printSkills() {
     std::array<skill*, 4> skills = this->getSkills();
     int index = 1;
@@ -187,6 +212,7 @@ void character::printSkills() {
     }
 }
 
+// here's my weapon and armor: good, right?
 void character::printEquipment() {
     std::cout << " - Equipment:\n";
     std::cout << "Type\tName\t\tAttack\tDefense\n";
@@ -194,20 +220,27 @@ void character::printEquipment() {
     std::cout << this->getCurrentArmor();
 }
 
+// let's see what I have looted till now...
 std::vector<item *> character::printInventory() {
     std::vector<item*> items;
     int index = 1;
+
     std::cout << "Inventory:\n";
     std::cout << " - Skillbooks\n";
     std::cout << "Index\tName\t\tMana\tAttack\n";
+
+    // retrieving the skillbooks in order
     std::vector<skillbook*> skillbooks = this->getSortedSkillbooks();
     for (skillbook* skb : skillbooks) {
         std::cout << index << ".\t" << skb;
         index++;
     }
     std::cout << "\n";
+
     std::cout << " - Equipment\n";
     std::cout << "Index\tType\tName\t\tAttack\tDefense\n";
+
+    // retrieving the equipments in order
     std::vector<equipment*> equipments = this->getSortedEquipment();
     for (equipment* equ : equipments) {
         if (dynamic_cast<weapon*>(equ)) {
@@ -218,8 +251,11 @@ std::vector<item *> character::printInventory() {
         index++;
     }
     std::cout << "\n";
+
     std::cout << " - Potions\n";
     std::cout << "Index\tName\t\tMana\tHP\tType\n";
+
+    // retrieving the potions in order
     std::vector<potion*> potions = this->getSortedPotions();
     for (potion* pot : potions) {
         std::cout << index << ".\t" << pot;
@@ -227,6 +263,7 @@ std::vector<item *> character::printInventory() {
     }
     std::cout << index << ".\tReturn\n\n";
 
+    // let's put it all in the bag to return it all in order
     items.insert(std::end(items), std::begin(skillbooks), std::end(skillbooks));
     items.insert(std::end(items), std::begin(equipments), std::end(equipments));
     items.insert(std::end(items), std::begin(potions), std::end(potions));
@@ -234,66 +271,91 @@ std::vector<item *> character::printInventory() {
     return items;
 }
 
+// which attack is more powerfull?
 bool SkillAttackCompare(skillbook* i, skillbook* j) {
     return i->getAttack() > j->getAttack();
 }
 
+// retrieve the skillbooks in order
 std::vector<skillbook *> character::getSortedSkillbooks() {
     std::vector<skillbook*> skillbooks = this->getSkillbooks();
-    if (skillbooks.size() == 0) {
+    if (skillbooks.empty()) {
         return {};
     }
+
+    // sorting
     std::sort(skillbooks.begin(), skillbooks.end(), SkillAttackCompare);
     std::vector<skillbook*> sortedSkillbooks;
+
+    // mana based attacks
     for (skillbook* skb : skillbooks) {
         if (skb->getManaCost() != 0) {
             sortedSkillbooks.push_back(skb);
         }
     }
+
+    // melee attacks
     for (skillbook* skb : skillbooks) {
         if (skb->getManaCost() == 0) {
             sortedSkillbooks.push_back(skb);
         }
     }
+
+    // return it all in order
     return sortedSkillbooks;
 }
 
+// which potion is more effective?
 bool PotionEffectCompare(potion* i, potion* j) {
     return i->hpModifier() > j->hpModifier();
 }
 
+// retrieve all potions in order
 std::vector<potion *> character::getSortedPotions() {
     std::vector<potion*> potions = this->getPotions();
-    if (potions.size() == 0) {
+    if (potions.empty()) {
         return {};
     }
+
+    // sorting
     std::sort(potions.begin(), potions.end(), PotionEffectCompare);
     std::vector<potion*> sortedPotions;
+
+    // good potions
     for (potion* pot : potions) {
         if (pot->isSelfUse()) {
             sortedPotions.push_back(pot);
         }
     }
+
+    // poisons: be careful here!
     for (potion* pot : potions) {
         if (!pot->isSelfUse()) {
             sortedPotions.push_back(pot);
         }
     }
+
+    // return it all in order
     return sortedPotions;
 }
 
+// which weapon is stronger?
 bool WeaponStatCompare(weapon* i, weapon* j) {
     return i->getAttack() > j->getAttack();
 }
 
+// which armor is sturdier?
 bool ArmorStatCompare(armor* i, armor* j) {
     return i->getDefense() > j->getDefense();
 }
 
+// retrieve all equipment in order
 std::vector<equipment *> character::getSortedEquipment() {
     std::vector<equipment*> equipments = this->getStoredEquipment();
     std::vector<weapon*> weapons;
     std::vector<armor*> armors;
+
+    // dividing between weapons and armors
     for (equipment* equ : equipments) {
         if (dynamic_cast<weapon*>(equ)) {
             weapons.push_back(dynamic_cast<weapon*>(equ));
@@ -301,14 +363,21 @@ std::vector<equipment *> character::getSortedEquipment() {
             armors.push_back(dynamic_cast<armor*>(equ));
         }
     }
+
+    // sorting
     std::sort(weapons.begin(), weapons.end(), WeaponStatCompare);
     std::sort(armors.begin(), armors.end(), ArmorStatCompare);
+
     std::vector<equipment*> sortedEquipment;
+
+    // put it all together and return it in order: weapons first and then armors
     sortedEquipment.insert(std::end(sortedEquipment), std::begin(weapons), std::end(weapons));
     sortedEquipment.insert(std::end(sortedEquipment), std::begin(armors), std::end(armors));
+
     return sortedEquipment;
 }
 
+// let's use that stuff!
 void character::useItem(item *it) {
     if (dynamic_cast<skillbook*>(it)) {
         this->learnSkillMenu(dynamic_cast<skillbook*>(it));
@@ -320,6 +389,7 @@ void character::useItem(item *it) {
         if (dynamic_cast<potion*>(it)->isSelfUse()) {
             this->usePotion(dynamic_cast<potion*>(it));
         } else {
+            // hey, that's dangerous, you know?
             std::cout << "Impossible to use a poison now!\n";
             return;
         }
@@ -328,25 +398,35 @@ void character::useItem(item *it) {
     }
 }
 
+// learning skill menu (yes, you can only have 4 skills at a time)
 void character::learnSkillMenu(skillbook *skb) {
     int choice;
     do {
         this->printSkills();
         std::cout << "5. Quit\n";
         std::cout << "Select a slot: ";
+
+        // checking input
         if (!(std::cin >> choice)) {
             std::cout << "Invalid input. Please enter a number.\n";
             std::cin.clear();
+
             // clear input buffer
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
+
+    // until you choose a valid option
     } while (choice < 1 || choice > 5);
     if (choice == 5) {
+
+        // I changed idea
         return;
     }
+    // let's learn that! Hey, I forgot the other one...
     this->learn(skb, choice - 1);
 }
 
+// displaying the character's information
 std::ostream& operator<<(std::ostream& flux, character* a) {
     flux << std::fixed << std::setprecision(1);
     flux << a->getHp() << "/" << a->getMaxHp() << " HP\n";
