@@ -60,12 +60,12 @@ float mage::useSkill(skill *attack) {
 
 // creating a mage (for enemies, right?)
 mage::mage(int level, armor *Armor, weapon *Weapon, std::vector<item*> inventory) {
-    m_hp = 80;
-    m_maxHp = 80;
-    m_mana = 120;
-    m_maxMana = 120;
-    m_attack = 70;
-    m_defense = 10;
+    m_hp = 70;
+    m_maxHp = 70;
+    m_mana = 110;
+    m_maxMana = 110;
+    m_attack = 65;
+    m_defense = 9;
     m_level = 1;
     m_xp = 100 * level;
     m_armor = Armor;

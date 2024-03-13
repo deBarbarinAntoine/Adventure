@@ -99,6 +99,7 @@ public:
     std::vector<equipment*> getSortedEquipment();
     void useItem(item *it);
     void learnSkillMenu(skillbook* skb);
+    void rest();
 };
 
 std::ostream& operator<<(std::ostream& flux, character* a);

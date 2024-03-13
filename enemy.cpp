@@ -8,7 +8,6 @@
 #include <random>
 #include <chrono>
 #include <iostream>
-#include <thread>
 
 // randomNb generates a random integer between `min` and `max`.
 int randomNb(int min, int max)  {
@@ -210,20 +209,40 @@ enemy::enemy(int level, float equipmentStats) {
     }
 }
 
+// the enemy's turn in battle
 float enemy::turn() {
+
+    // if he's dying and has a health potion, take it
     if ((m_character->getHp() < 20) && (m_character->isHealthPotion())) {
         m_character->usePotion(m_character->getHealthPot());
+
+    // use a skill instead: attack is the best defense
     } else {
+
+        // retrieving all available skills
         std::array<skill*, 4> skills = m_character->getSkills();
-        for (skill* singleSkill:skills) {
-            if (m_character->getCurrentMana() >= singleSkill->getManaCost()) {
-                float damage = m_character->useSkill(singleSkill);
-                std::cout << std::fixed << std::setprecision(1);
-                std::cout << this->getName() << " inflicted you ";
-                std::this_thread::sleep_for(std::chrono::milliseconds(1500));
-                return damage;
+        std::vector<skill*> availableSkills;
+        for (skill* s : skills) {
+            if (s != nullptr && s->getManaCost() <= m_character->getCurrentMana()) {
+                availableSkills.push_back(s);
             }
         }
+
+        // setting some random skill selection
+        int random = randomNb(0, 100000);
+        float damage = m_character->useSkill(availableSkills[random % availableSkills.size()]);
+
+        // clear the terminal: try windows command and if error, then linux command
+        int res = system("cls");
+        if (res != 0) {
+            res = system("clear");
+        }
+
+        // little message about the enemy's turn
+        std::cout << std::fixed << std::setprecision(1);
+        std::cout << this->getName() << " inflicted you ";
+
+        return damage;
     }
     return 0;
 }
@@ -327,7 +346,6 @@ std::vector<item *> enemy::getDrop() {
 
 void enemy::battleMeet() {
     std::cout << std::fixed << std::setprecision(1);
-    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
     std::cout << "\n";
     std::cout << this->getName() << ": " << this->getCharacter()->getClassName() << "\t" << this->getCharacter()->getHp() << "/" << this->getCharacter()->getMaxHp() << " HP\t" << this->getCharacter()->getCurrentMana() << "/" << this->getCharacter()->getMaxMana() << " Mana\n";
 }

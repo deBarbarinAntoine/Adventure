@@ -56,8 +56,6 @@ bool player::turn(std::unique_ptr<enemy> &adv) {
         }
         std::cout << std::fixed << std::setprecision(1);
 
-        std::cout << "You met a " << adv->getName() << "...\n";
-
         // displaying the enemy's information
         adv->battleMeet();
         std::cout << "\n\t----------------------------------------\n\n";
@@ -131,6 +129,8 @@ bool player::turn(std::unique_ptr<enemy> &adv) {
         adv->takeDamage(damage);
         std::cout << " on the enemy.\n";
 
+        std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+
     } else if (option - availableSkills.size() < availablePotions.size()) {
 
         // let's take a potion instead (or throw poison, maybe?)
@@ -159,7 +159,7 @@ void player::menu() {
         std::cout << this;
 
         // displaying the player's main menu
-        choice = menu::getMenuChoice("------------ Main Menu ------------", std::vector<std::string>{"New Battle", "Inventory", "Quit"});
+        choice = menu::getMenuChoice("------------ Main Menu ------------", std::vector<std::string>{"New Battle", "Inventory", "Rest", "Quit"});
 
         switch (choice) {
             case 1:
@@ -169,20 +169,23 @@ void player::menu() {
                 // if the player is dead, exit the current game...
                 // sorry if it's a little harsh on you!
                 if (this->isDead()) {
-                    std::cout << "You are dead, sorry!\n";
-//                    choice = 3;
+                    choice = 4;
                 }
                 break;
             case 2:
                 // display the inventory
                 this->inventoryMenu();
                 break;
+            case 3:
+                // taking a little rest on the way to greatness is necessary
+                this->rest();
+                break;
             default:
                 // nothing to do here
                 break;
         }
     // until you want to quit ...or you die!
-    } while (choice != 3);
+    } while (choice != 4);
 }
 
 // display the player's creation menu: let's begin the adventure!
@@ -203,8 +206,11 @@ void player::creationMenu() {
     // rest assured, you'll have a name
     } while (name.empty() || name == "");
 
-    // let's breathe a little, okay?
-    std::cout << "\n";
+    // clear the terminal: try windows command and if error, then linux command
+    res = system("cls");
+    if (res != 0) {
+        res = system("clear");
+    }
 
     // displaying the class selection menu
     int choice = menu::getMenuChoice("Hello "+ name +" Choose your class:", std::vector<std::string>{"Mage (more mana, less hp, magic boost)", "Warrior (more hp, less mana, melee boost)"});
@@ -222,6 +228,16 @@ void player::startBattle() {
     // creating the enemy
     std::unique_ptr<enemy> adv = std::make_unique<enemy>(this->getLevel(), this->getEquipmentStats());
     adv->setCharacterStats();
+
+    // clear the terminal: try windows command and if error, then linux command
+    int res = system("cls");
+    if (res != 0) {
+        res = system("clear");
+    }
+
+    // little introduction message
+    std::cout << "You met a " << adv->getName() << "...\n";
+    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
 
     // let's go to the battle loop to kill some mob
     this->runBattle(adv);
@@ -351,6 +367,9 @@ void player::runBattle(std::unique_ptr<enemy> &adv) {
         // enemy turn
         this->takeDamage(adv->turn());
         std::cout << ".\n";
+
+        // little timer to read the message about the enemy's damage done.
+        std::this_thread::sleep_for(std::chrono::milliseconds(1500));
 
         // exit the loop if the player died... GAME OVER my dear!
     } while (!this->isDead());

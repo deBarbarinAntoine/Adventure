@@ -7,6 +7,8 @@
 #include <iomanip>
 #include <iostream>
 #include <limits>
+#include <chrono>
+#include <thread>
 
 // Ouch! It hurts...
 void character::takeDamage(float damage) {
@@ -22,7 +24,7 @@ void character::takeDamage(float damage) {
 
 // Hey! You there?
 bool character::isDead() const {
-    return m_hp > 0;
+    return m_hp <= 0;
 }
 
 // let's take a potion
@@ -193,7 +195,12 @@ character::~character() {
 // is it a poison or can I take it to heal myself?
 bool character::isHealthPotion() const {
     std::vector<potion*> potions = this->getPotions();
-    return std::any_of(potions.begin(), potions.end(), potion::isHealthPot());
+    for (potion* pot : potions) {
+        if (pot->getName() == "health potion") {
+            return true;
+        }
+    }
+    return false;
 }
 
 // where is my health potion?... Ah, here it is!
@@ -246,6 +253,9 @@ std::vector<item *> character::printInventory() {
 
     // retrieving the skillbooks in order
     std::vector<skillbook*> skillbooks = this->getSortedSkillbooks();
+    if (skillbooks.empty()) {
+        std::cout << "------- Empty section -------\n";
+    }
     for (skillbook* skb : skillbooks) {
         std::cout << index << ".\t" << skb;
         index++;
@@ -257,6 +267,9 @@ std::vector<item *> character::printInventory() {
 
     // retrieving the equipments in order
     std::vector<equipment*> equipments = this->getSortedEquipment();
+    if (equipments.empty()) {
+        std::cout << "------- Empty section -------\n";
+    }
     for (equipment* equ : equipments) {
         if (dynamic_cast<weapon*>(equ)) {
             std::cout << index << ".\t" << dynamic_cast<weapon*>(equ);
@@ -272,6 +285,9 @@ std::vector<item *> character::printInventory() {
 
     // retrieving the potions in order
     std::vector<potion*> potions = this->getSortedPotions();
+    if (potions.empty()) {
+        std::cout << "------- Empty section -------\n";
+    }
     for (potion* pot : potions) {
         std::cout << index << ".\t" << pot;
         index++;
@@ -441,12 +457,35 @@ void character::learnSkillMenu(skillbook *skb) {
     this->learn(skb, choice - 1);
 }
 
+// just take a little rest now and then, it's healthy!
+void character::rest() {
+    // checking if the player needs rest or not
+    if (m_hp == m_maxHp && m_mana == m_maxMana) {
+        std::cout << "I don't feel sleepy at all, you know?\n";
+        std::cout << "Let's kill some monster now... I can't wait!\n";
+    } else {
+        m_hp += m_maxHp / 10;
+        m_mana += m_maxMana / 10;
+        if (m_hp > m_maxHp) {
+            m_hp = m_maxHp;
+        }
+        if (m_mana > m_maxMana) {
+            m_mana = m_maxMana;
+        }
+
+        // a little message to know what just happened...
+        std::cout << "Mmmmhhh... I feel reinvigorated!\n";
+        std::cout << "Ready to face my enemies now!\n";
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+}
+
 // displaying the character's information
 std::ostream& operator<<(std::ostream& flux, character* a) {
     flux << std::fixed << std::setprecision(1);
     flux << a->getHp() << "/" << a->getMaxHp() << " HP\n";
     flux << a->getCurrentMana() << "/" << a->getMaxMana() << " Mana\n";
-    flux << "Level " << a->getLevel() << "\t" << a->getXp() << "/100\n\n";
+    flux << "Level " << a->getLevel() << "\t" << a->getXp() << "/100 XP\n\n";
     a->printEquipment();
     a->printSkills();
     return flux;

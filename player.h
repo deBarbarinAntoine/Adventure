@@ -37,6 +37,7 @@ public:
     void itemMenu(item* it);
     void pocketItem(item* it) { m_character->pocketItem(it); }
     void takeDamage(float damage) { m_character->takeDamage(damage); }
+    void rest() { m_character->rest(); };
 };
 
 // for displaying purposes

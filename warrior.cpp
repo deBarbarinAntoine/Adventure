@@ -63,12 +63,12 @@ float warrior::useSkill(skill *attack) {
 
 // a warrior constructor (for enemies only, right?)
 warrior::warrior(int level, armor *Armor, weapon *Weapon, std::vector<item*> inventory) {
-    m_hp = 100;
-    m_maxHp = 100;
-    m_mana = 80;
-    m_maxMana = 80;
-    m_attack = 100;
-    m_defense = 15;
+    m_hp = 90;
+    m_maxHp = 90;
+    m_mana = 70;
+    m_maxMana = 70;
+    m_attack = 90;
+    m_defense = 12;
     m_level = 1;
     m_xp = 100 * level;
     m_armor = Armor;
