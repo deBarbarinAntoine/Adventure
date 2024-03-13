@@ -10,9 +10,14 @@
 
 // Ouch! It hurts...
 void character::takeDamage(float damage) {
-    float defense = m_defense + m_armor->getDefense();
+    float armorDefense = 0;
+    if (m_armor != nullptr) {
+        armorDefense = m_armor->getDefense();
+    }
+    float defense = m_defense + armorDefense;
     damage -= damage * (defense / 100);
     m_hp -= damage;
+    std::cout << damage << " damage";
 }
 
 // Hey! You there?
@@ -25,13 +30,14 @@ void character::usePotion(potion* pot) {
     if (pot->isSelfUse()) {
         this->hpRegen(pot->hpModifier());
         this->manaRegen(pot->manaModifier());
+        this->deleteItem(pot);
     }
 }
 
 // Watch it! This item will disappear...
-void character::deleteItem(item *it) {
+void character::deleteItem(const item *it) {
     int index = 0;
-    for (item*& owned: m_inventory) {
+    for (const item* owned: m_inventory) {
         if (owned == it) {
 
             // index retrieved successfully!
@@ -64,6 +70,7 @@ void character::usePotion(potion *pot, character *adv) {
         this->usePotion(pot);
     } else {
         adv->takePotionDamage(pot);
+        this->deleteItem(pot);
     }
 }
 
@@ -86,18 +93,26 @@ void character::manaUse(float amount) {
 // let's try that new weapon, okay?
 void character::equip(weapon *newWeapon) {
     if (m_weapon != nullptr) {
+
+        //put the current weapon in the inventory (no waste, okay?)
         m_inventory.push_back(m_weapon);
     }
     m_weapon = newWeapon;
+
+    // remove the new weapon from the inventory (no cheat!)
     this->deleteItem(newWeapon);
 }
 
 // ohoh! That new armor seems outstanding!
 void character::equip(armor *newArmor) {
     if (m_armor != nullptr) {
+
+        //put the current armor in the inventory (no waste, okay?)
         m_inventory.push_back(m_armor);
     }
     m_armor = newArmor;
+
+    // remove the new armor from the inventory (no cheat!)
     this->deleteItem(newArmor);
 }
 
@@ -169,8 +184,8 @@ void character::pocketItem(item *it) {
 
 // hey! Where is he?... Who was it?... Was there someone else here?...
 character::~character() {
-    delete &m_armor;
-    delete &m_weapon;
+    delete m_armor;
+    delete m_weapon;
     delete &m_inventory;
     delete &m_skills;
 }
@@ -430,7 +445,8 @@ void character::learnSkillMenu(skillbook *skb) {
 std::ostream& operator<<(std::ostream& flux, character* a) {
     flux << std::fixed << std::setprecision(1);
     flux << a->getHp() << "/" << a->getMaxHp() << " HP\n";
-    flux << a->getCurrentMana() << "/" << a->getMaxMana() << " Mana\n\n";
+    flux << a->getCurrentMana() << "/" << a->getMaxMana() << " Mana\n";
+    flux << "Level " << a->getLevel() << "\t" << a->getXp() << "/100\n\n";
     a->printEquipment();
     a->printSkills();
     return flux;

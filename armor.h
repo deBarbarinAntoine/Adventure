@@ -21,7 +21,7 @@ protected:
 
 public:
     // armor constructor (or better named armor generator)
-    armor(float defense);
+    explicit armor(float defense);
 
     // getters
     std::string getName() const { return m_name; };

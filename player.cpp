@@ -5,11 +5,12 @@
 #include "mage.h"
 #include "warrior.h"
 #include "menu.h"
-#include "battle.h"
 #include "player.h"
 
 #include <iostream>
 #include <limits>
+#include <chrono>
+#include <thread>
 
 // the player's constructor: we'll destroy them all!
 player::player(std::string name, int type) {
@@ -38,20 +39,36 @@ player::player(std::string name, int type) {
 }
 
 // the player's turn: let's beat some trash villain here!
-bool player::turn(enemy* adv) {
-    std::cout << adv;
-    std::cout << "\n\n";
-    std::cout << this;
+bool player::turn(std::unique_ptr<enemy> &adv) {
+
     int choice;
     int index;
     std::array<skill*, 4> skills = m_character->getSkills();
     std::vector<potion*> potions = m_character->getPotions();
     std::vector<skill*> availableSkills;
     std::vector<potion*> availablePotions;
+
     do {
+        // clear the terminal: try windows command and if error, then linux command
+        int res = system("cls");
+        if (res != 0) {
+            res = system("clear");
+        }
+        std::cout << std::fixed << std::setprecision(1);
+
+        std::cout << "You met a " << adv->getName() << "...\n";
+
+        // displaying the enemy's information
+        adv->battleMeet();
+        std::cout << "\n\t----------------------------------------\n\n";
+
+        // displaying the player's information
+        std::cout << this->getName() << ": " << this->getCharacter()->getClassName() << "\t" << this->getCharacter()->getHp() << "/" << this->getCharacter()->getMaxHp() << " HP\t" << this->getCharacter()->getCurrentMana() << "/" << this->getCharacter()->getMaxMana() << " Mana\n";
+
+
+        // displaying the player's options (in a menu)
         choice = 0;
         index = 1;
-        std::cout << "\n";
         std::cout << " - Skills:\n";
         std::cout << "Index\tName\t\tMana\tAttack\n";
 
@@ -66,7 +83,6 @@ bool player::turn(enemy* adv) {
                 index++;
             }
         }
-        std::cout << "\n";
         std::cout << " - Potions:\n";
 
         // looking for health potion
@@ -99,18 +115,26 @@ bool player::turn(enemy* adv) {
             // clear input buffer
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
+
+    // until you choose a valid option
     } while (choice < 1 || choice > index);
-    if (choice <= availableSkills.size()) {
+
+    // setting a valid index integer (beginning from value 0)
+    int option = choice - 1;
+
+    if (option < availableSkills.size()) {
 
         // Avadakedavra!... take that!
-        float damage = m_character->useSkill(availableSkills[choice]);
-        adv->takeDamage(damage);
-        std::cout << "You inflicted " << damage << " damage on the enemy.\n";
+        float damage = m_character->useSkill(availableSkills[option]);
 
-    } else if (choice - availableSkills.size() <= availablePotions.size()) {
+        std::cout << "You inflicted ";
+        adv->takeDamage(damage);
+        std::cout << " on the enemy.\n";
+
+    } else if (option - availableSkills.size() < availablePotions.size()) {
 
         // let's take a potion instead (or throw poison, maybe?)
-        m_character->usePotion(availablePotions[choice - availableSkills.size()], adv->getCharacter());
+        m_character->usePotion(availablePotions[option - availableSkills.size()], adv->getCharacter());
     } else {
         // Flee from the battle!
         return false;
@@ -145,7 +169,8 @@ void player::menu() {
                 // if the player is dead, exit the current game...
                 // sorry if it's a little harsh on you!
                 if (this->isDead()) {
-                    choice = 3;
+                    std::cout << "You are dead, sorry!\n";
+//                    choice = 3;
                 }
                 break;
             case 2:
@@ -179,7 +204,7 @@ void player::creationMenu() {
     } while (name.empty() || name == "");
 
     // let's breathe a little, okay?
-    std::cout << "\n\n";
+    std::cout << "\n";
 
     // displaying the class selection menu
     int choice = menu::getMenuChoice("Hello "+ name +" Choose your class:", std::vector<std::string>{"Mage (more mana, less hp, magic boost)", "Warrior (more hp, less mana, melee boost)"});
@@ -194,21 +219,23 @@ void player::creationMenu() {
 // let's start the battle, I crave some action here!...
 void player::startBattle() {
 
-    // new battle (with me of course, I'm not a spectator)
-    battle* Battle = new battle(this);
+    // creating the enemy
+    std::unique_ptr<enemy> adv = std::make_unique<enemy>(this->getLevel(), this->getEquipmentStats());
+    adv->setCharacterStats();
 
     // let's go to the battle loop to kill some mob
-    Battle->run();
-
-    // clear the battle when it's finished
-    if (Battle) {
-        delete &Battle;
-    }
+    this->runBattle(adv);
 }
 
 // inventory menu: to select and interact
 // with the stuff you looted form your opponents
 void player::inventoryMenu() {
+
+    // clear the terminal: try windows command and if error, then linux command
+    int res = system("cls");
+    if (res != 0) {
+        res = system("clear");
+    }
     int choice;
     std::vector<item*> options;
     do {
@@ -240,19 +267,25 @@ void player::inventoryMenu() {
 
 // the item's menu: what to do with it?
 void player::itemMenu(item* it) {
+
+    // clear the terminal: try windows command and if error, then linux command
+    int res = system("cls");
+    if (res != 0) {
+        res = system("clear");
+    }
     int choice;
     do {
         std::string action;
 
         // is it a weapon?
         if (dynamic_cast<weapon*>(it)) {
-            std::cout << "Type\tName\t\tAttack\tDefense\n";
+            std::cout << "Type\tName\t\t\tAttack\tDefense\n";
             std::cout << dynamic_cast<weapon*>(it);
             action = "Equip";
 
         // or an armor, maybe?
         } else if (dynamic_cast<armor*>(it)) {
-            std::cout << "Type\tName\t\tAttack\tDefense\n";
+            std::cout << "Type\tName\t\t\tAttack\tDefense\n";
             std::cout << dynamic_cast<armor*>(it);
             action = "Equip";
 
@@ -300,6 +333,73 @@ void player::itemMenu(item* it) {
             break;
     }
 
+}
+
+void player::runBattle(std::unique_ptr<enemy> &adv) {
+    do {
+
+        // checking the player's turn return (pun not intentional)
+        if (!this->turn(adv)) {
+
+            // Flee from the battle if the player's turn returns false
+            return;
+        }
+        // exit the loop if the player killed the enemy
+        if (adv->isDead()) {
+            break;
+        }
+        // enemy turn
+        this->takeDamage(adv->turn());
+        std::cout << ".\n";
+
+        // exit the loop if the player died... GAME OVER my dear!
+    } while (!this->isDead());
+
+    // player's win
+    if (adv->isDead()) {
+        std::cout << "Congratulations, you won!\n";
+
+        // getting the drops
+        std::vector<item*> drops = adv->getDrop();
+        for (item* it : drops) {
+
+            // displaying the corresponding information
+            if (dynamic_cast<armor*>(it)) {
+                std::cout << "You retrieved:\n";
+                std::cout << "Type\tName\t\t\tAttack\tDefense\n";
+                std::cout << dynamic_cast<armor*>(it);
+            } else if (dynamic_cast<weapon*>(it)) {
+                std::cout << "You retrieved:\n";
+                std::cout << "Type\tName\t\t\tAttack\tDefense\n";
+                std::cout << dynamic_cast<weapon*>(it);
+            } else if (dynamic_cast<skillbook*>(it)) {
+                std::cout << "You retrieved:\n";
+                std::cout << "Name\t\tMana\tAttack\n";
+                std::cout << dynamic_cast<skillbook*>(it);
+            } else if (dynamic_cast<potion*>(it)) {
+                std::cout << "You retrieved:\n";
+                std::cout << "Name\t\tMana\tHP\tType\n";
+                std::cout << dynamic_cast<potion*>(it);
+            }
+
+            // putting each item in the player's inventory
+            this->pocketItem(it);
+        }
+        std::cout << "You gained " << adv->getXp() << " XP\n";
+
+        // retrieve the enemy's worth Xp
+        this->gainXp(adv->getXp());
+
+        // level-up if necessary
+        m_character->levelUp();
+
+        // wait 3 sec to read all information
+        std::this_thread::sleep_for(std::chrono::milliseconds(3500));
+
+        // player's loss... GAME OVER...
+    } else if (this->isDead()) {
+        std::cout << "GAME OVER!\n";
+    }
 }
 
 // displaying the player's information

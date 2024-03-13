@@ -23,7 +23,7 @@ protected:
     float m_manaCost;
 
 public:
-    skill(skillbook *skillBook);
+    explicit skill(skillbook *skillBook);
     ~skill() = default;
     std::string getName() const { return m_name; };
     float getManaCost() const { return m_manaCost; };

@@ -16,7 +16,7 @@ public:
     mage(int level, armor* Armor, weapon* Weapon, std::vector<item*> inventory);
     void levelUp() override;
     float useSkill(skill* attack) override;
-    std::string getClassName() const { return "mage"; }
+    std::string getClassName() const override  { return "mage"; }
 };
 
 

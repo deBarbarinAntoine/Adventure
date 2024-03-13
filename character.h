@@ -57,14 +57,14 @@ protected:
 
 public:
     character() = default;
-    ~character();
+    virtual ~character();
     void takeDamage(float damage);
     bool isDead() const;
     virtual void levelUp() = 0;
     void hpRegen(float regen);
     void manaRegen(float regen);
     void manaUse(float amount);
-    void deleteItem(item* it);
+    void deleteItem(const item *it);
     void usePotion(potion* pot);
     void usePotion(potion* pot, character* adv);
     void takePotionDamage(potion* pot);
@@ -89,6 +89,7 @@ public:
     float getCurrentMana() const { return m_mana; }
     float getMaxHp() const { return m_maxHp; }
     float getMaxMana() const { return m_maxMana; }
+    int getXp() const { return m_xp; }
     virtual std::string getClassName() const = 0;
     void printSkills();
     void printEquipment();

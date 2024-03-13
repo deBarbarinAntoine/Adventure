@@ -24,8 +24,8 @@ private:
 
 public:
     enemy(int level, float equipmentStats);
-    ~enemy();
-    void turn(character* charPlayer);
+    ~enemy() = default;
+    float turn();
     void setCharacterStats();
     bool isDead() const { return m_character->isDead(); }
     int getXp() const { return m_xp; }
@@ -33,9 +33,7 @@ public:
     std::string getName() const { return m_name; }
     character* getCharacter() { return m_character; }
     void takeDamage(float damage) { m_character->takeDamage(damage); }
+    void battleMeet();
 };
-
-// displaying enemy's information
-std::ostream& operator<<(std::ostream& flux, enemy* a);
 
 #endif //ADVENTURE_ENEMY_H

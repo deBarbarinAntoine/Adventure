@@ -5,8 +5,6 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -static-libgcc -static-libstdc++")
 
 add_executable(Adventure main.cpp
-        battle.cpp
-        battle.h
         player.cpp
         player.h
         enemy.cpp

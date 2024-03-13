@@ -89,7 +89,7 @@ enemy::enemy(int level, float equipmentStats) {
     inventory.push_back(new potion("mana potion", 15, 0, true));
 
     // putting a poison in the inventory
-    inventory.push_back(new potion("poison", 0, 15, false));
+    inventory.push_back(new potion("lethal poison", 0, 15, false));
 
     // setting the enemy's character's class (50/50 chance) and its skillbooks according to its level.
     if (random < 50000) {
@@ -210,7 +210,7 @@ enemy::enemy(int level, float equipmentStats) {
     }
 }
 
-void enemy::turn(character* charPlayer) {
+float enemy::turn() {
     if ((m_character->getHp() < 20) && (m_character->isHealthPotion())) {
         m_character->usePotion(m_character->getHealthPot());
     } else {
@@ -218,17 +218,14 @@ void enemy::turn(character* charPlayer) {
         for (skill* singleSkill:skills) {
             if (m_character->getCurrentMana() >= singleSkill->getManaCost()) {
                 float damage = m_character->useSkill(singleSkill);
-                charPlayer->takeDamage(damage);
                 std::cout << std::fixed << std::setprecision(1);
-                std::cout << this->getName() << " inflicted you " << damage << " damage.\n";
+                std::cout << this->getName() << " inflicted you ";
                 std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+                return damage;
             }
         }
     }
-}
-
-enemy::~enemy() {
-//    delete &m_character;
+    return 0;
 }
 
 void enemy::setCharacterStats() {
@@ -328,9 +325,9 @@ std::vector<item *> enemy::getDrop() {
     return drops;
 }
 
-// to handle the enemy's display easily
-std::ostream& operator<<(std::ostream& flux, enemy* a) {
-    flux << a->getName() << ": " << a->getCharacter()->getClassName() << std::endl;
-    flux << a->getCharacter() << std::endl;
-    return flux;
+void enemy::battleMeet() {
+    std::cout << std::fixed << std::setprecision(1);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+    std::cout << "\n";
+    std::cout << this->getName() << ": " << this->getCharacter()->getClassName() << "\t" << this->getCharacter()->getHp() << "/" << this->getCharacter()->getMaxHp() << " HP\t" << this->getCharacter()->getCurrentMana() << "/" << this->getCharacter()->getMaxMana() << " Mana\n";
 }

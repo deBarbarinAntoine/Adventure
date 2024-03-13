@@ -21,7 +21,8 @@ protected:
 
 public:
     player(std::string name, int type);
-    bool turn(enemy* adv);
+    ~player() { delete m_character; }
+    bool turn(std::unique_ptr<enemy> &adv);
     void menu();
     static void creationMenu();
     int getLevel() const { return m_character->getLevel(); };
@@ -29,11 +30,13 @@ public:
     bool isDead() const { return m_character->isDead(); }
     void gainXp(int xp) { m_character-> gainXp(xp); }
     void startBattle();
+    void runBattle(std::unique_ptr<enemy> &adv);
     character* getCharacter() { return m_character; }
     std::string getName() const { return m_name; }
     void inventoryMenu();
     void itemMenu(item* it);
     void pocketItem(item* it) { m_character->pocketItem(it); }
+    void takeDamage(float damage) { m_character->takeDamage(damage); }
 };
 
 // for displaying purposes

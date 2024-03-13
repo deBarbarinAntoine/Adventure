@@ -7,7 +7,7 @@
 #include "menu.h"
 
 // a simple menu builder
-int menu::getMenuChoice(std::string title, std::vector<std::string> options) {
+int menu::getMenuChoice(const std::string& title, std::vector<std::string> options) {
     int minChoice = 1;
     int maxChoice = (int)(options.size());
 
