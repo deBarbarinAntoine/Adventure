@@ -10,6 +10,7 @@
 
 #include "enemy.h"
 #include <string>
+#include <memory>
 
 class player {
 protected:
